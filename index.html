@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .calculator-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result,
+        .error {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator-container">
+        <h2>String Calculator</h2>
+        <input type="text" id="numbersInput" placeholder="Enter comma-separated numbers">
+        <button onclick="calculateSum()">Calculate</button>
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        function calculateSum() {
+            const input = document.getElementById('numbersInput').value;
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+
+            try {
+                const result = add(input);
+                resultDiv.textContent = `Sum: ${result}`;
+                errorDiv.textContent = '';
+            } catch (error) {
+                resultDiv.textContent = '';
+                errorDiv.textContent = error.message;
+            }
+        }
+
+        function add(numbers) {
+            if (numbers === "") {
+                return 0;
+            }
+
+            const numArray = numbers.split(",").map(Number);
+
+            // Filter out negative numbers
+            const negatives = numArray.filter(num => num < 0);
+
+            // If there are any negative numbers, throw an error
+            if (negatives.length > 0) {
+                throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
+            }
+
+            return numArray.reduce((sum, num) => sum + num, 0);
+        }
+    </script>
+
+</body>
+
+</html>
