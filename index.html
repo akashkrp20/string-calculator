@@ -22,6 +22,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 300px;
         }
 
         input[type="text"] {
@@ -40,6 +41,7 @@
             color: white;
             cursor: pointer;
             font-size: 16px;
+            width: 100%;
         }
 
         button:hover {
@@ -62,7 +64,7 @@
 
     <div class="calculator-container">
         <h2>String Calculator</h2>
-        <input type="text" id="numbersInput" placeholder="Enter comma-separated numbers">
+        <input type="text" id="numbersInput" placeholder="Enter numbers with delimiter">
         <button onclick="calculateSum()">Calculate</button>
         <div class="result" id="result"></div>
         <div class="error" id="error"></div>
@@ -89,12 +91,17 @@
                 return 0;
             }
 
-            const numArray = numbers.split(",").map(Number);
+            let delimiter = ",";
+            if (numbers.startsWith("//")) {
+                const delimiterEnd = numbers.indexOf("\n");
+                delimiter = numbers.substring(2, delimiterEnd);
+                numbers = numbers.substring(delimiterEnd + 1);
+                console.log(numbers)
+            }
 
-            // Filter out negative numbers
+            const numArray = numbers.split(new RegExp(`[${delimiter}\n]`)).map(Number);
+
             const negatives = numArray.filter(num => num < 0);
-
-            // If there are any negative numbers, throw an error
             if (negatives.length > 0) {
                 throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
             }
